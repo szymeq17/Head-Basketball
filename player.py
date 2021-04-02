@@ -7,7 +7,7 @@ class Player(pygame.sprite.Sprite):
 
     def __init__(self):
         super(Player, self).__init__()
-        self.surf = pygame.Surface((100, 75))
+        self.surf = pygame.Surface((75, 100))
         self.surf.fill((255, 255, 255))
         self.rect = self.surf.get_rect()
         self.rect.x = 0
@@ -22,14 +22,18 @@ class Player(pygame.sprite.Sprite):
         
         if pressed_keys[pygame.K_SPACE]:
             if not(self.jumping):
-                self.speed = 1.5 * PLAYER_STEP
+                self.speed = PLAYER_JUMP
                 self.jumping = True
         
         self.rect.move_ip(0, -self.speed)
-        if(self.speed > -1.5 * PLAYER_STEP):
-            self.speed -= 1
+        # if(self.speed > -1.5 * PLAYER_STEP):
+        #     self.speed -= 1
+        if self.speed > -PLAYER_JUMP and self.jumping:
+            self.speed -= 2
         else:
             self.jumping = False
+        if not(self.jumping):
+            self.speed = 0
 
         
         # KEEP PLAYER ON THE SCREEN

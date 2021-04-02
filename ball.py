@@ -13,9 +13,10 @@ class Ball(pygame.sprite.Sprite):
         pygame.draw.circle(self.surf, (255, 161, 0), (BALL_RADIUS, BALL_RADIUS), BALL_RADIUS)
 
     def update_pos(self):
-        self.rect.move_ip(self.x_acc, -self.y_acc)
+        if not(self.on_ground):
+            self.rect.move_ip(self.x_acc, -self.y_acc)
+            self.y_acc -= 1
 
-        self.y_acc -= 1
         
         # if(self.x_acc > 0):
         #     self.x_acc -= 1
@@ -29,12 +30,19 @@ class Ball(pygame.sprite.Sprite):
         if self.rect.right > SCREEN_WIDTH:
             self.rect.right = SCREEN_WIDTH
 
-        if self.rect.top <= 0:
-            self.rect.top = 0
+        # if self.rect.top <= 0:
+        #     self.rect.top = 0
 
         if self.rect.bottom >= SCREEN_HEIGHT:
-            if(abs(self.y_acc) < 0.5):
+            if(abs(self.y_acc) < 5):
                 self.rect.bottom = SCREEN_HEIGHT
+                self.on_ground = True
             else:
-                self.y_acc = -self.y_acc / 1.2
+                self.y_acc = -self.y_acc / 1.5
 
+    def collide(self, player_speed):
+        print(self.y_acc)
+        self.y_acc = -self.y_acc / 1.5
+        self.y_acc += player_speed
+        self.rect.move_ip(self.x_acc, -self.y_acc)
+        self.y_acc -= 1
